@@ -154,6 +154,13 @@ class L1CaloJetProducer : public edm::EDProducer {
                 //float hcal_5x5 = 0.;
                 //float hcal_5x7 = 0.;
                 float hcal_7x7 = 0.;
+	        //Victor's edit: added additional hcal tower configurations to check
+	        float hcal_3x3 = 0.;
+	        float hcal_1x3 = 0.;
+		float hcal_3x1 = 0.;
+		float hcal_Cross = 0.;
+		float hcal_X = 0.;
+	        //End of Victor's edit
                 //float hcal_2x3 = 0.;
                 //float hcal_2x3_1 = 0.;
                 //float hcal_2x3_2 = 0.;
@@ -170,6 +177,13 @@ class L1CaloJetProducer : public edm::EDProducer {
                 //float ecal_5x5 = 0.;
                 //float ecal_5x7 = 0.;
                 float ecal_7x7 = 0.;
+	        //Victor's edit: added additional ecal tower configurations to check
+	        float ecal_3x3 = 0.;
+		float ecal_1x3 = 0.;
+		float ecal_3x1 = 0.;
+		float ecal_Cross = 0.;
+		float ecal_X = 0.;
+	        //End of Victor's edit
                 //float ecal_2x3 = 0.;
                 //float ecal_2x3_1 = 0.;
                 //float ecal_2x3_2 = 0.;
@@ -186,6 +200,13 @@ class L1CaloJetProducer : public edm::EDProducer {
                 //float l1eg_5x5 = 0.;
                 //float l1eg_5x7 = 0.;
                 float l1eg_7x7 = 0.;
+	        //Victor's edit: added additional l1eg tower configurations to check
+	        float l1eg_3x3 = 0.;
+		float l1eg_1x3 = 0.;
+		float l1eg_3x1 = 0.;
+		float l1eg_Cross = 0.;
+		float l1eg_X = 0.;
+	        //End of Victor's edit
                 //float l1eg_2x3 = 0.;
                 //float l1eg_2x3_1 = 0.;
                 //float l1eg_2x3_2 = 0.;
@@ -202,13 +223,20 @@ class L1CaloJetProducer : public edm::EDProducer {
                 float l1eg_nL1EGs_standaloneIso = 0.;
                 float l1eg_nL1EGs_trkMatchSS = 0.;
                 float l1eg_nL1EGs_trkMatchIso = 0.;
-
+	  
                 float total_seed = 0.;
                 //float total_3x3 = 0.;
                 float total_3x5 = 0.;
                 //float total_5x5 = 0.;
                 //float total_5x7 = 0.;
                 float total_7x7 = 0.;
+	        //Victor's edit: added additional total tower configurations to check
+	        float total_3x3 = 0.;
+		float total_1x3 = 0.;
+		float total_3x1 = 0.;
+		float total_Cross = 0.;
+		float total_X = 0.;
+	        //End of Victor's edit
                 //float total_2x3 = 0.;
                 //float total_2x3_1 = 0.;
                 //float total_2x3_2 = 0.;
@@ -752,6 +780,28 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                 //caloJetObj.total_5x5 += totalP4.pt();
                 //caloJetObj.total_5x7 += totalP4.pt();
                 caloJetObj.total_7x7 += totalP4.pt();
+		//Victor's edit: need to add seed energy to additional tower configurations
+		caloJetObj.hcal_3x3 += hcalP4.pt();
+		caloJetObj.hcal_1x3 += hcalP4.pt();
+		caloJetObj.hcal_3x1 += hcalP4.pt();
+		caloJetObj.hcal_Cross += hcalP4.pt();
+		caloJetObj.hcal_X += hcalP4.pt();
+		caloJetObj.ecal_3x3 += ecalP4.pt();
+		caloJetObj.ecal_1x3 += ecalP4.pt();
+		caloJetObj.ecal_3x1 += ecalP4.pt();
+		caloJetObj.ecal_Cross += ecalP4.pt();
+		caloJetObj.ecal_X += ecalP4.pt();
+		caloJetObj.l1eg_3x3 += l1egP4.pt();
+		caloJetObj.l1eg_1x3 += l1egP4.pt();
+		caloJetObj.l1eg_3x1 += l1egP4.pt();
+		caloJetObj.l1eg_Cross += l1egP4.pt();
+		caloJetObj.l1eg_X += l1egP4.pt();
+		caloJetObj.total_3x3 += totalP4.pt();
+		caloJetObj.total_1x3 += totalP4.pt();
+		caloJetObj.total_3x1 += totalP4.pt();
+		caloJetObj.total_Cross += totalP4.pt();
+		caloJetObj.total_X += totalP4.pt();
+	        //End of Victor's edit
 
                 // Some discrimination vars, 2x2s and 2x3 including central seed
                 //caloJetObj.hcal_2x3 += hcalP4.pt();
@@ -928,6 +978,54 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                     caloJetObj.l1eg_7x7 += l1egP4.pt();
                     caloJetObj.total_7x7 += totalP4.pt();
                 }
+		//Victor's edit: added some different tower configurations
+		if ( (abs( d_iEta ) <= 1 && abs( d_iPhi ) <= 1) || 
+                    ( fabs( d_eta ) < 0.1 && fabs( d_phi ) < 0.1 ) )
+                {
+                    caloJetObj.hcal_3x3 += hcalP4.pt();
+                    caloJetObj.ecal_3x3 += ecalP4.pt();
+                    caloJetObj.l1eg_3x3 += l1egP4.pt();
+                    caloJetObj.total_3x3 += totalP4.pt();
+                }
+
+		if ( (abs( d_iEta ) == 0 && abs( d_iPhi ) <= 1) || 
+                    ( fabs( d_eta ) < 0.001 && fabs( d_phi ) < 0.1 ) )
+                {
+                    caloJetObj.hcal_1x3 += hcalP4.pt();
+                    caloJetObj.ecal_1x3 += ecalP4.pt();
+                    caloJetObj.l1eg_1x3 += l1egP4.pt();
+                    caloJetObj.total_1x3 += totalP4.pt();
+                }
+		
+		if ( (abs( d_iEta ) <= 1 && abs( d_iPhi ) == 0) || 
+                    ( fabs( d_eta ) < 0.1 && fabs( d_phi ) < 0.001 ) )
+                {
+                    caloJetObj.hcal_3x1 += hcalP4.pt();
+                    caloJetObj.ecal_3x1 += ecalP4.pt();
+                    caloJetObj.l1eg_3x1 += l1egP4.pt();
+                    caloJetObj.total_3x1 += totalP4.pt();
+                }
+
+		if ( (abs( d_iEta ) <= 1 && abs( d_iPhi ) == 0 ) || 
+		    (abs( d_iEta ) == 0 && abs( d_iPhi ) <= 1 ) || 
+                     ( fabs( d_eta ) < 0.1 && fabs( d_phi ) < 0.001 ) ||
+		      ( fabs( d_eta ) < 0.001 && fabs( d_phi ) < 0.1 ) )
+                {
+                    caloJetObj.hcal_Cross += hcalP4.pt();
+                    caloJetObj.ecal_Cross += ecalP4.pt();
+                    caloJetObj.l1eg_Cross += l1egP4.pt();
+                    caloJetObj.total_Cross += totalP4.pt();
+                }
+
+		if ( (abs( d_iEta ) <= 1 && abs( d_iPhi ) <= 1 && abs( d_iEta ) == abs ( d_iPhi ) ) || 
+		     ( fabs( d_eta ) < 0.1 && fabs( d_phi ) < 0.1 && ( fabs( d_phi ) - 0.02 ) < fabs( d_eta) && fabs( d_eta ) < ( fabs( d_phi ) + 0.02 ) ) )
+                {
+                    caloJetObj.hcal_X += hcalP4.pt();
+                    caloJetObj.ecal_X += ecalP4.pt();
+                    caloJetObj.l1eg_X += l1egP4.pt();
+                    caloJetObj.total_X += totalP4.pt();
+                }
+	        //End of Victor's edit
 
                 //// Some discrimination vars, 2x2s and 2x3s including central seed
                 //// Barrel first, 2x3
@@ -1023,7 +1121,31 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     {
 
 
+        //Victor's edit: put custom tower configurations into params branch
+        params["hcal_3x3"] = caloJetObj.hcal_3x3;
+        params["hcal_1x3"] = caloJetObj.hcal_1x3;
+        params["hcal_3x1"] = caloJetObj.hcal_3x1;
+        params["hcal_Cross"] = caloJetObj.hcal_Cross;
+        params["hcal_X"] = caloJetObj.hcal_X;
 
+	params["ecal_3x3"] = caloJetObj.ecal_3x3;
+        params["ecal_1x3"] = caloJetObj.ecal_1x3;
+        params["ecal_3x1"] = caloJetObj.ecal_3x1;
+        params["ecal_Cross"] = caloJetObj.ecal_Cross;
+        params["ecal_X"] = caloJetObj.ecal_X;
+
+	params["l1eg_3x3"] = caloJetObj.l1eg_3x3;
+        params["l1eg_1x3"] = caloJetObj.l1eg_1x3;
+        params["l1eg_3x1"] = caloJetObj.l1eg_3x1;
+        params["l1eg_Cross"] = caloJetObj.l1eg_Cross;
+        params["l1eg_X"] = caloJetObj.l1eg_X;
+
+	params["total_3x3"] = caloJetObj.total_3x3;
+        params["total_1x3"] = caloJetObj.total_1x3;
+        params["total_3x1"] = caloJetObj.total_3x1;
+        params["total_Cross"] = caloJetObj.total_Cross;
+        params["total_X"] = caloJetObj.total_X;
+	//End of Victor's edit
 
         params["seed_pt"] = caloJetObj.seedTowerET;
         params["seed_eta"] = caloJetObj.seedTower.eta();
