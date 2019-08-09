@@ -160,6 +160,21 @@ class L1CaloJetProducer : public edm::EDProducer {
 		float hcal_3x1 = 0.;
 		float hcal_Cross = 0.;
 		float hcal_X = 0.;
+	        //Individual hcal tower energies in 3x5 array. 11 corresponds to lower left corner (least eta, least phi)
+	        float hcal_11 = 0;
+	        float hcal_12 = 0;
+	        float hcal_13 = 0;
+	        float hcal_21 = 0;
+	        float hcal_22 = 0;
+	        float hcal_23 = 0;
+	        float hcal_31 = 0;
+	        float hcal_33 = 0;
+	        float hcal_41 = 0;
+	        float hcal_42 = 0;
+	        float hcal_43 = 0;
+	        float hcal_51 = 0;
+	        float hcal_52 = 0;
+	        float hcal_53 = 0;
 	        //End of Victor's edit
                 //float hcal_2x3 = 0.;
                 //float hcal_2x3_1 = 0.;
@@ -183,6 +198,21 @@ class L1CaloJetProducer : public edm::EDProducer {
 		float ecal_3x1 = 0.;
 		float ecal_Cross = 0.;
 		float ecal_X = 0.;
+	        //Individual ecal tower energies in 3x5 array. 11 corresponds to lower left corner (least eta, least phi)
+	        float ecal_11 = 0;
+	        float ecal_12 = 0;
+	        float ecal_13 = 0;
+	        float ecal_21 = 0;
+	        float ecal_22 = 0;
+	        float ecal_23 = 0;
+	        float ecal_31 = 0;
+	        float ecal_33 = 0;
+	        float ecal_41 = 0;
+	        float ecal_42 = 0;
+	        float ecal_43 = 0;
+	        float ecal_51 = 0;
+	        float ecal_52 = 0;
+	        float ecal_53 = 0;
 	        //End of Victor's edit
                 //float ecal_2x3 = 0.;
                 //float ecal_2x3_1 = 0.;
@@ -206,6 +236,21 @@ class L1CaloJetProducer : public edm::EDProducer {
 		float l1eg_3x1 = 0.;
 		float l1eg_Cross = 0.;
 		float l1eg_X = 0.;
+	        //Individual l1eg tower energies in 3x5 array. 11 corresponds to lower left corner (least eta, least phi)
+	        float l1eg_11 = 0;
+	        float l1eg_12 = 0;
+	        float l1eg_13 = 0;
+	        float l1eg_21 = 0;
+	        float l1eg_22 = 0;
+	        float l1eg_23 = 0;
+	        float l1eg_31 = 0;
+	        float l1eg_33 = 0;
+	        float l1eg_41 = 0;
+	        float l1eg_42 = 0;
+	        float l1eg_43 = 0;
+	        float l1eg_51 = 0;
+	        float l1eg_52 = 0;
+	        float l1eg_53 = 0;
 	        //End of Victor's edit
                 //float l1eg_2x3 = 0.;
                 //float l1eg_2x3_1 = 0.;
@@ -236,6 +281,21 @@ class L1CaloJetProducer : public edm::EDProducer {
 		float total_3x1 = 0.;
 		float total_Cross = 0.;
 		float total_X = 0.;
+	        //Individual total tower energies in 3x5 array. 11 corresponds to lower left corner (least eta, least phi)
+	        float total_11 = 0;
+	        float total_12 = 0;
+	        float total_13 = 0;
+	        float total_21 = 0;
+	        float total_22 = 0;
+	        float total_23 = 0;
+	        float total_31 = 0;
+	        float total_33 = 0;
+	        float total_41 = 0;
+	        float total_42 = 0;
+	        float total_43 = 0;
+	        float total_51 = 0;
+	        float total_52 = 0;
+	        float total_53 = 0;
 	        //End of Victor's edit
                 //float total_2x3 = 0.;
                 //float total_2x3_1 = 0.;
@@ -1025,6 +1085,120 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                     caloJetObj.l1eg_X += l1egP4.pt();
                     caloJetObj.total_X += totalP4.pt();
                 }
+
+		//Fill individual tower energies in 3x5 array. 11 corresponds to lower left corner (least eta, least phi)
+		if ( ( d_iEta == 1 && d_iPhi == 2) || 
+		     ( d_eta > 0.02 && d_eta < 0.1 && d_phi > 0.12 && d_phi < 0.2 ) )
+                {
+                    caloJetObj.hcal_11 += hcalP4.pt();
+		    caloJetObj.ecal_11 += ecalP4.pt();
+		    caloJetObj.l1eg_11 += l1egP4.pt();
+		    caloJetObj.total_11 += totalP4.pt();
+                }
+		if ( ( d_iEta == 0 && d_iPhi == 2) || 
+		     ( fabs( d_eta ) < 0.02 && d_phi > 0.12 && d_phi < 0.2 ) )
+                {
+                    caloJetObj.hcal_12 += hcalP4.pt();
+		    caloJetObj.ecal_12 += ecalP4.pt();
+		    caloJetObj.l1eg_12 += l1egP4.pt();
+		    caloJetObj.total_12 += totalP4.pt();
+                }
+		if ( ( d_iEta == -1 && d_iPhi == 2) || 
+		     ( d_eta < -0.02 && d_eta > -0.1 && d_phi > 0.12 && d_phi < 0.2 ) )
+                {
+                    caloJetObj.hcal_13 += hcalP4.pt();
+		    caloJetObj.ecal_13 += ecalP4.pt();
+		    caloJetObj.l1eg_13 += l1egP4.pt();
+		    caloJetObj.total_13 += totalP4.pt();
+                }
+		if ( ( d_iEta == 1 && d_iPhi == 1) || 
+		     ( d_eta > 0.02 && d_eta < 0.1 && d_phi > 0.02 && d_phi < 0.1 ) )
+                {
+                    caloJetObj.hcal_21 += hcalP4.pt();
+		    caloJetObj.ecal_21 += ecalP4.pt();
+		    caloJetObj.l1eg_21 += l1egP4.pt();
+		    caloJetObj.total_21 += totalP4.pt();
+                }
+		if ( ( d_iEta == 0 && d_iPhi == 1) || 
+		     ( fabs( d_eta ) < 0.02 && d_phi > 0.02 && d_phi < 0.1 ) )
+                {
+                    caloJetObj.hcal_22 += hcalP4.pt();
+		    caloJetObj.ecal_22 += ecalP4.pt();
+		    caloJetObj.l1eg_22 += l1egP4.pt();
+		    caloJetObj.total_22 += totalP4.pt();
+                }
+		if ( ( d_iEta == -1 && d_iPhi == 1) || 
+		     ( d_eta < -0.02 && d_eta > -0.1 && d_phi > 0.02 && d_phi < 0.1 ) )
+                {
+                    caloJetObj.hcal_23 += hcalP4.pt();
+		    caloJetObj.ecal_23 += ecalP4.pt();
+		    caloJetObj.l1eg_23 += l1egP4.pt();
+		    caloJetObj.total_23 += totalP4.pt();
+                }
+		if ( ( d_iEta == 1 && d_iPhi == 0) || 
+		     ( d_eta > 0.02 && d_eta < 0.1 && fabs( d_phi ) < 0.02 ) )
+                {
+                    caloJetObj.hcal_31 += hcalP4.pt();
+		    caloJetObj.ecal_31 += ecalP4.pt();
+		    caloJetObj.l1eg_31 += l1egP4.pt();
+		    caloJetObj.total_31 += totalP4.pt();
+                }
+		if ( ( d_iEta == -1 && d_iPhi == 0) || 
+		     ( d_eta < -0.02 && d_eta > -0.1 && fabs( d_phi ) < 0.02 ) )
+                {
+                    caloJetObj.hcal_33 += hcalP4.pt();
+		    caloJetObj.ecal_33 += ecalP4.pt();
+		    caloJetObj.l1eg_33 += l1egP4.pt();
+		    caloJetObj.total_33 += totalP4.pt();
+                }
+		if ( ( d_iEta == 1 && d_iPhi == -1) || 
+		     ( d_eta > 0.02 && d_eta < 0.1 && d_phi < -0.02 && d_phi > -0.1 ) )
+                {
+                    caloJetObj.hcal_41 += hcalP4.pt();
+		    caloJetObj.ecal_41 += ecalP4.pt();
+		    caloJetObj.l1eg_41 += l1egP4.pt();
+		    caloJetObj.total_41 += totalP4.pt();
+                }
+		if ( ( d_iEta == 0 && d_iPhi == -1) || 
+		     ( fabs( d_eta ) < 0.02 && d_phi < -0.02 && d_phi > -0.1 ) )
+                {
+                    caloJetObj.hcal_42 += hcalP4.pt();
+		    caloJetObj.ecal_42 += ecalP4.pt();
+		    caloJetObj.l1eg_42 += l1egP4.pt();
+		    caloJetObj.total_42 += totalP4.pt();
+                }
+		if ( ( d_iEta == -1 && d_iPhi == -1) || 
+		     ( d_eta < -0.02 && d_eta > -0.1 && d_phi < -0.02 && d_phi > -0.1 ) )
+                {
+                    caloJetObj.hcal_43 += hcalP4.pt();
+		    caloJetObj.ecal_43 += ecalP4.pt();
+		    caloJetObj.l1eg_43 += l1egP4.pt();
+		    caloJetObj.total_43 += totalP4.pt();
+                }
+		if ( ( d_iEta == 1 && d_iPhi == -2) || 
+		     ( d_eta > 0.02 && d_eta < 0.1 && d_phi < -0.12 && d_phi > -0.2 ) )
+                {
+                    caloJetObj.hcal_51 += hcalP4.pt();
+		    caloJetObj.ecal_51 += ecalP4.pt();
+		    caloJetObj.l1eg_51 += l1egP4.pt();
+		    caloJetObj.total_51 += totalP4.pt();
+                }
+		if ( ( d_iEta == 0 && d_iPhi == -2) || 
+		     ( fabs( d_eta ) < 0.02 && d_phi < -0.12 && d_phi > -0.2 ) )
+                {
+                    caloJetObj.hcal_52 += hcalP4.pt();
+		    caloJetObj.ecal_52 += ecalP4.pt();
+		    caloJetObj.l1eg_52 += l1egP4.pt();
+		    caloJetObj.total_52 += totalP4.pt();
+                }
+		if ( ( d_iEta == -1 && d_iPhi == -2) || 
+		     ( d_eta < -0.02 && d_eta > -0.1 && d_phi < -0.12 && d_phi > -0.2 ) )
+                {
+                    caloJetObj.hcal_53 += hcalP4.pt();
+		    caloJetObj.ecal_53 += ecalP4.pt();
+		    caloJetObj.l1eg_53 += l1egP4.pt();
+		    caloJetObj.total_53 += totalP4.pt();
+                }
 	        //End of Victor's edit
 
                 //// Some discrimination vars, 2x2s and 2x3s including central seed
@@ -1145,6 +1319,67 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
         params["total_3x1"] = caloJetObj.total_3x1;
         params["total_Cross"] = caloJetObj.total_Cross;
         params["total_X"] = caloJetObj.total_X;
+
+	//Add individual tower energies in 3x5 array to params. 11 corresponds to lower left corner (least eta, least phi)
+        params["hcal_11"] = caloJetObj.hcal_11;
+        params["hcal_12"] = caloJetObj.hcal_12;
+        params["hcal_13"] = caloJetObj.hcal_13;
+        params["hcal_21"] = caloJetObj.hcal_21;
+        params["hcal_22"] = caloJetObj.hcal_22;
+        params["hcal_23"] = caloJetObj.hcal_23;
+        params["hcal_31"] = caloJetObj.hcal_31;
+        params["hcal_33"] = caloJetObj.hcal_33;
+        params["hcal_41"] = caloJetObj.hcal_41;
+        params["hcal_42"] = caloJetObj.hcal_42;
+        params["hcal_43"] = caloJetObj.hcal_43;
+        params["hcal_51"] = caloJetObj.hcal_51;
+        params["hcal_52"] = caloJetObj.hcal_52;
+        params["hcal_53"] = caloJetObj.hcal_53;
+
+        params["ecal_11"] = caloJetObj.ecal_11;
+        params["ecal_12"] = caloJetObj.ecal_12;
+        params["ecal_13"] = caloJetObj.ecal_13;
+        params["ecal_21"] = caloJetObj.ecal_21;
+        params["ecal_22"] = caloJetObj.ecal_22;
+        params["ecal_23"] = caloJetObj.ecal_23;
+        params["ecal_31"] = caloJetObj.ecal_31;
+        params["ecal_33"] = caloJetObj.ecal_33;
+        params["ecal_41"] = caloJetObj.ecal_41;
+        params["ecal_42"] = caloJetObj.ecal_42;
+        params["ecal_43"] = caloJetObj.ecal_43;
+        params["ecal_51"] = caloJetObj.ecal_51;
+        params["ecal_52"] = caloJetObj.ecal_52;
+        params["ecal_53"] = caloJetObj.ecal_53;
+
+        params["l1eg_11"] = caloJetObj.l1eg_11;
+        params["l1eg_12"] = caloJetObj.l1eg_12;
+        params["l1eg_13"] = caloJetObj.l1eg_13;
+        params["l1eg_21"] = caloJetObj.l1eg_21;
+        params["l1eg_22"] = caloJetObj.l1eg_22;
+        params["l1eg_23"] = caloJetObj.l1eg_23;
+        params["l1eg_31"] = caloJetObj.l1eg_31;
+        params["l1eg_33"] = caloJetObj.l1eg_33;
+        params["l1eg_41"] = caloJetObj.l1eg_41;
+        params["l1eg_42"] = caloJetObj.l1eg_42;
+        params["l1eg_43"] = caloJetObj.l1eg_43;
+        params["l1eg_51"] = caloJetObj.l1eg_51;
+        params["l1eg_52"] = caloJetObj.l1eg_52;
+        params["l1eg_53"] = caloJetObj.l1eg_53;
+
+        params["total_11"] = caloJetObj.total_11;
+        params["total_12"] = caloJetObj.total_12;
+        params["total_13"] = caloJetObj.total_13;
+        params["total_21"] = caloJetObj.total_21;
+        params["total_22"] = caloJetObj.total_22;
+        params["total_23"] = caloJetObj.total_23;
+        params["total_31"] = caloJetObj.total_31;
+        params["total_33"] = caloJetObj.total_33;
+        params["total_41"] = caloJetObj.total_41;
+        params["total_42"] = caloJetObj.total_42;
+        params["total_43"] = caloJetObj.total_43;
+        params["total_51"] = caloJetObj.total_51;
+        params["total_52"] = caloJetObj.total_52;
+        params["total_53"] = caloJetObj.total_53;
 	//End of Victor's edit
 
         params["seed_pt"] = caloJetObj.seedTowerET;
