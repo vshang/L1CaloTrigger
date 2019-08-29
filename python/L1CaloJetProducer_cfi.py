@@ -10,6 +10,7 @@ L1CaloJetProducer = cms.EDProducer("L1CaloJetProducer",
     EtMinForSeedHit = cms.double(2.5), # was 2.5
     EtMinForCollection = cms.double(10),
     EtMinForTauCollection = cms.double(10),
+    L1TrackInputTag = cms.InputTag("TTTracksFromTracklet", "Level1TTTracks"), #Victor's edit: add track input tag
     l1CaloTowers = cms.InputTag("L1TowerCalibrationProducer","L1CaloTowerCalibratedCollection"),
     L1CrystalClustersInputTag = cms.InputTag("L1EGammaClusterEmuProducer", "L1EGXtalClusterEmulator"),
     #L1HgcalTowersInputTag = cms.InputTag("hgcalTriggerPrimitiveDigiProducer","tower"),
