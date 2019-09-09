@@ -132,8 +132,7 @@ class L1CaloJetProducer : public edm::EDProducer {
 
         bool debug;
         // Victor's track matching edit: Define track collection token and handle 
-        // edm::EDGetTokenT< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > > L1TrackInputToken_;
-        // edm::Handle< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > > l1trackHandle;
+        edm::EDGetTokenT< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > > L1TrackInputToken_;
         // End of Victor's track matching edit
 
         edm::EDGetTokenT< L1CaloTowerCollection > l1TowerToken_;
@@ -464,7 +463,7 @@ L1CaloJetProducer::L1CaloJetProducer(const edm::ParameterSet& iConfig) :
     tauCalibrationsHGCal(iConfig.getParameter<std::vector<double>>("tauCalibrationsHGCal")),
     tauL1egInfoHGCal(iConfig.getParameter<std::vector<edm::ParameterSet>>("tauL1egInfoHGCal")),
     debug(iConfig.getParameter<bool>("debug")),
-    // L1TrackInputToken_(consumes< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > >(iConfig.getParameter<edm::InputTag>("L1TrackInputTag"))) //Victor's track matching edit: store track info provided by L1CaloJetProducer_cfi.py in track input token L1TrackInputToken
+    L1TrackInputToken_(consumes< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > >(iConfig.getParameter<edm::InputTag>("L1TrackInputTag"))), //Victor's track matching edit: store track info provided by L1CaloJetProducer_cfi.py in track input token L1TrackInputToken
     l1TowerToken_(consumes< L1CaloTowerCollection >(iConfig.getParameter<edm::InputTag>("l1CaloTowers")))
 
 {
@@ -474,7 +473,7 @@ L1CaloJetProducer::L1CaloJetProducer(const edm::ParameterSet& iConfig) :
     //produces<l1extra::L1JetParticleCollection>("L1CaloClusterCollectionWithCuts");
     produces< BXVector<l1t::Jet> >("L1CaloJetCollectionBXV");
     produces< BXVector<l1t::Tau> >("L1CaloTauCollectionBXV");
-    // produces< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > >("Level1TTTracks"); //Victor's track matching edit: produce collection of tracks in Round 1 processing for Round 2 track matching
+    produces< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > >("Level1TTTracks"); //Victor's track matching edit: produce collection of tracks in Round 1 processing for Round 2 track matching
 
 
     if(debug) printf("\nHcalTpEtMin = %f\nEcalTpEtMin = %f\n", HcalTpEtMin, EcalTpEtMin);
@@ -678,10 +677,25 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     //std::unique_ptr<l1extra::L1JetParticleCollection> L1CaloClusterCollectionWithCuts( new l1extra::L1JetParticleCollection );
     std::unique_ptr<BXVector<l1t::Jet>> L1CaloJetCollectionBXV(new l1t::JetBxCollection);
     std::unique_ptr<BXVector<l1t::Tau>> L1CaloTauCollectionBXV(new l1t::TauBxCollection);
-    // std::unique_ptr< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > > Level1TTTracks (new std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > ); //Victor's track matching edit: define collection of tracks as Level1TTTracks
 
-    //Victor's track matching edit: store track info from L1TrackInputToken_ in l1trackHandle
+    //Victor's track matching edit: store track info from L1TrackInputToken_ in collection of tracks as Level1TTTracks
+    edm::Handle< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > > l1trackHandle;
+    iEvent.getByToken(L1TrackInputToken_, l1trackHandle);
+    std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > caloTrackCollection;
+    caloTrackCollection = *l1trackHandle.product();
 
+    //Define unique_ptr to store track info in Level1TTTracks
+    std::unique_ptr< std::vector< TTTrack < Ref_Phase2TrackerDigi_ > > > Level1TTTracks (new std::vector< TTTrack < Ref_Phase2TrackerDigi_ > >); 
+
+    //Add tracks for each event to Level1TTTracks
+    if ( l1trackHandle.isValid() )
+    {
+      for (auto& l1track : caloTrackCollection)
+      {
+	  Level1TTTracks->push_back( l1track );
+      }
+    }
+    //End of Victor's track matching edit
 
     // Load the ECAL+HCAL tower sums coming from L1EGammaCrystalsEmulatorProducer.cc
     std::vector< SimpleCaloHit > l1CaloTowers;
@@ -1565,7 +1579,7 @@ void L1CaloJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     //iEvent.put(std::move(L1CaloClusterCollectionWithCuts), "L1CaloClusterCollectionWithCuts" );
     iEvent.put(std::move(L1CaloJetCollectionBXV),"L1CaloJetCollectionBXV");
     iEvent.put(std::move(L1CaloTauCollectionBXV),"L1CaloTauCollectionBXV");
-    // iEvent.put(std::move(Level1TTTracks),"Level1TTTracks"); //Victor's track matching edit: Put Level1TTTracks into event module under L1CaloJetProducer
+    iEvent.put(std::move(Level1TTTracks),"Level1TTTracks"); //Victor's track matching edit: Put Level1TTTracks into event module under L1CaloJetProducer
 
     //printf("end L1CaloJetProducer\n");
 }
